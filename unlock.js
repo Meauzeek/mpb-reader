@@ -7,6 +7,7 @@
   const supplied = params.get('unlock');
   if (supplied !== null) history.replaceState(null,'',location.pathname+location.search);
   const storageLabel = 'v41';
+  const revisions = {"reader": "188b2530bbe11d17", "si": "2b791423eab68806"};
   function keyStore() {
     return new Promise((resolve,reject) => {
       const request = indexedDB.open('mpb-reader-private-access',1);
@@ -28,7 +29,7 @@
     } finally { db.close(); }
   }
   async function decrypt(name,key) {
-    const response = await fetch(new URL('./'+name+'.bin',location.href),{credentials:'omit',cache:'no-cache'});
+    const response = await fetch(new URL('./'+name+'.bin?v='+revisions[name],location.href),{credentials:'omit',cache:'force-cache'});
     if (!response.ok) throw Error('下载失败');
     const bytes = new Uint8Array(await response.arrayBuffer());
     const data = {name:'AES-GCM',iv:bytes.subarray(0,12),additionalData:new TextEncoder().encode('mpb-reader-v41:'+name)};
