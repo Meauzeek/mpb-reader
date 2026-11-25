@@ -28,7 +28,7 @@
     } finally { db.close(); }
   }
   async function decrypt(name,key) {
-    const response = await fetch(new URL('./'+name+'.bin',location.href),{credentials:'omit'});
+    const response = await fetch(new URL('./'+name+'.bin',location.href),{credentials:'omit',cache:'no-cache'});
     if (!response.ok) throw Error('下载失败');
     const bytes = new Uint8Array(await response.arrayBuffer());
     const data = {name:'AES-GCM',iv:bytes.subarray(0,12),additionalData:new TextEncoder().encode('mpb-reader-v41:'+name)};
